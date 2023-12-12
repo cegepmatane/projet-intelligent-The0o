@@ -92,7 +92,9 @@
             retour.classList.remove("taille6")
             retour.classList.add("taille7")
         }
+        retour.style.top = parseInt(retour.style.top.substring(0, retour.style.top.length - 2)) + 1 + "px"
         detecterCollisionListe(retour)
+        retour.style.top = parseInt(retour.style.top.substring(0, retour.style.top.length - 2)) - 1 + "px"
     }
 
     function descendreMaxCollide(rond1, rond2) {
