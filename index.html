@@ -21,27 +21,28 @@
     TAILLE_ROND = 50
     BOTTOM_CONTENANT = document.getElementById("body").offsetHeight - TAILLE_ROND;
     CLASSE_PROCHAIN_FRUIT = "taille1"
+    PERDU = false
 
     numeroFruit = 0
 
     function ajouterFruit() {
-        let x = event.clientX;        
-        let y = event.clientY;
-        let tailleElement = Math.random() * (3 - 1) + 1;
-        rond = document.createElement("div")
-        rond.classList.add("rond")
-        rond.classList.add(CLASSE_PROCHAIN_FRUIT)
-        CLASSE_PROCHAIN_FRUIT = "taille" + Math.round(tailleElement)
-        console.log(CLASSE_PROCHAIN_FRUIT);
-        console.log(document.getElementById("previsualisation"));
-        document.getElementById("previsualisation").className = CLASSE_PROCHAIN_FRUIT
-        rond.id = numeroFruit
-        numeroFruit++;
-        rond.style.left = x - (document.getElementById("body").offsetWidth - document.getElementById("grosContenant").offsetWidth) / 2 - TAILLE_ROND / 2 + "px"
-        rond.style.top = y + TAILLE_ROND / 2 + "px"
-        document.getElementById("playground").appendChild(rond)
+        if (!PERDU) {
+            let x = event.clientX;        
+            let y = event.clientY;
+            let tailleElement = Math.random() * (3 - 1) + 1;
+            rond = document.createElement("div")
+            rond.classList.add("rond")
+            rond.classList.add(CLASSE_PROCHAIN_FRUIT)
+            CLASSE_PROCHAIN_FRUIT = "taille" + Math.round(tailleElement)
+            document.getElementById("previsualisation").className = CLASSE_PROCHAIN_FRUIT
+            rond.id = numeroFruit
+            numeroFruit++;
+            rond.style.left = x - (document.getElementById("body").offsetWidth - document.getElementById("grosContenant").offsetWidth) / 2 - TAILLE_ROND / 2 + "px"
+            rond.style.top = y + TAILLE_ROND / 2 + "px"
+            document.getElementById("playground").appendChild(rond)
 
-        descendre(rond)
+            descendre(rond)
+        }
     }
 
     function descendre(rond) {
@@ -106,6 +107,9 @@
 
     function descendreMaxCollide(rond1, rond2) {
         rond2.style.top = parseInt(rond1.style.top.substring(0, rond1.style.top.length - 2)) - TAILLE_ROND + "px"
+        if (rond2.getBoundingClientRect().y < document.getElementById("contenant").getBoundingClientRect().y) {
+            PERDU = true
+        }
     }
 
     function detecterCollision(element1, element2) {
