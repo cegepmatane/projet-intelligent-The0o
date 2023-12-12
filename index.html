@@ -11,12 +11,16 @@
         <div id="playground" onclick="ajouterFruit()"></div>
         <div id="contenant"></div>
     </div>
+    <div id="previsualisation">
+
+    </div>
 </body>
 <script>
 
     VALEUR_DESCENTE = 10
     TAILLE_ROND = 50
     BOTTOM_CONTENANT = document.getElementById("body").offsetHeight - TAILLE_ROND;
+    CLASSE_PROCHAIN_FRUIT = "taille1"
 
     numeroFruit = 0
 
@@ -26,7 +30,11 @@
         let tailleElement = Math.random() * (3 - 1) + 1;
         rond = document.createElement("div")
         rond.classList.add("rond")
-        rond.classList.add("taille" + Math.round(tailleElement))
+        rond.classList.add(CLASSE_PROCHAIN_FRUIT)
+        CLASSE_PROCHAIN_FRUIT = "taille" + Math.round(tailleElement)
+        console.log(CLASSE_PROCHAIN_FRUIT);
+        console.log(document.getElementById("previsualisation"));
+        document.getElementById("previsualisation").className = CLASSE_PROCHAIN_FRUIT
         rond.id = numeroFruit
         numeroFruit++;
         rond.style.left = x - (document.getElementById("body").offsetWidth - document.getElementById("grosContenant").offsetWidth) / 2 - TAILLE_ROND / 2 + "px"
@@ -59,7 +67,6 @@
                 }
             }
         });
-        console.log(retour.classList, rond.classList);
         if (retour.classList && rond.classList && retour.classList.toString() == rond.classList.toString()) {
             fusionner(rond, retour)
         }
