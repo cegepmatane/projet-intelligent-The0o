@@ -1,0 +1,48 @@
+#grosContenant {
+    height: 100%;
+    width: 300px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+}
+
+#playground {
+    height: 40%;
+}
+
+#contenant {
+    width: 100%;
+    border: 1px black solid;
+    border-top: none;
+    height: 60%;
+}
+
+.taille1 {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgb(129, 241, 95);
+    position: absolute;
+}
+
+.taille2 {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgb(241, 95, 95);
+    position: absolute;
+}
+
+.taille3 {
+    width: 10px;
+    height: 10px;
+    background-color: rgb(95, 95, 241);
+    border-radius: 50%;
+    position: absolute;
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body style="background-color: aliceblue;" id="body">
+    <div id="grosContenant">
+        <div id="playground" onclick="ajouterFruit()"></div>
+        <div id="contenant"></div>
+    </div>
+</body>
+<script>
+
+    BOTTOM_CONTENANT = document.getElementById("body").offsetHeight - 10;
+    VALEUR_DESCENTE = 10
+    numeroFruit = 0
+
+    function ajouterFruit() {
+        let x = event.clientX;        
+        let y = event.clientY;
+        let tailleElement = Math.random() * (3 - 1) + 1;
+        rond = document.createElement("div")
+        rond.classList.add("taille" + Math.round(tailleElement))
+        rond.classList.add("rond")
+        rond.id = numeroFruit
+        numeroFruit++;
+        rond.style.left = x - (document.getElementById("body").offsetWidth - document.getElementById("grosContenant").offsetWidth) / 2 - 5 + "px"
+        rond.style.top = y + 5 + "px"
+        document.getElementById("playground").appendChild(rond)
+
+        descendre(rond)
+    }
+
+    function descendre(rond) {
+        rond.style.top = parseInt(rond.style.top.substring(0, rond.style.top.length - 2)) + VALEUR_DESCENTE + "px"
+        console.log(parseInt(rond.style.top.substring(0, rond.style.top.length - 2)));
+        if (detecterCollisionListe(rond)) {
+            console.log("TEST2");
+            descendreMaxCollide(detecterCollisionListe(rond), rond);
+        }
+        else if (parseInt(rond.style.top.substring(0, rond.style.top.length - 2)) + VALEUR_DESCENTE > BOTTOM_CONTENANT) {
+            console.log("TEST3");
+            sleep(20).then(() => { descendreMax(rond); });
+        }
+        else if (parseInt(rond.style.top.substring(0, rond.style.top.length - 2)) < BOTTOM_CONTENANT) {
+            sleep(20).then(() => { descendre(rond); });
+        }
+    }
+
+    function detecterCollisionListe(rond) {
+        retour = false;
+        var elementsRond = document.querySelectorAll('.rond');
+        elementsRond.forEach(function(element) {
+            if (element.id !== rond.id) {
+                if (detecterCollision(element, rond)) {
+                    retour = element;
+                }
+            }
+        });
+        return retour
+    }
+
+    function descendreMaxCollide(rond1, rond2) {
+        rond2.style.top = parseInt(rond1.style.top.substring(0, rond1.style.top.length - 2)) - 10 + "px"
+    }
+
+    function detecterCollision(element1, element2) {
+        const rect1 = element1.getBoundingClientRect();
+        const rect2 = element2.getBoundingClientRect();
+
+        if (rect1.top - rect2.top < 20 && rect1.top - rect2.top > 0) {
+            if (rect1.right < rect2.right) {
+                if (rect1.right + 5 < rect2.right - 5) {
+                    return false
+                }
+            }
+            else {
+                if (rect1.right - 5 > rect2.right + 5) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        /*return !(rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom);*/
+  }
+
+    function descendreMax(rond) {
+        rond.style.top = BOTTOM_CONTENANT + "px"
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+</script>
+</html>
