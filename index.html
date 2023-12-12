@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="index.css">
+    <script src="Run.js"></script>
 </head>
 <body style="background-color: aliceblue;" id="body">
     <div id="grosContenant">
-        <div id="playground" onclick="ajouterFruit()"></div>
+        <div id="playground" onclick="lancerProgramme()"></div>
         <div id="contenant"></div>
     </div>
     <div id="previsualisation">
@@ -16,132 +17,23 @@
     </div>
 </body>
 <script>
-
-    VALEUR_DESCENTE = 10
-    TAILLE_ROND = 50
-    BOTTOM_CONTENANT = document.getElementById("body").offsetHeight - TAILLE_ROND;
-    CLASSE_PROCHAIN_FRUIT = "taille1"
-    PERDU = false
-
-    numeroFruit = 0
-
-    function ajouterFruit() {
-        if (!PERDU) {
-            let x = event.clientX;        
-            let y = event.clientY;
-            let tailleElement = Math.random() * (3 - 1) + 1;
-            rond = document.createElement("div")
-            rond.classList.add("rond")
-            rond.classList.add(CLASSE_PROCHAIN_FRUIT)
-            CLASSE_PROCHAIN_FRUIT = "taille" + Math.round(tailleElement)
-            document.getElementById("previsualisation").className = CLASSE_PROCHAIN_FRUIT
-            rond.id = numeroFruit
-            numeroFruit++;
-            rond.style.left = x - (document.getElementById("body").offsetWidth - document.getElementById("grosContenant").offsetWidth) / 2 - TAILLE_ROND / 2 + "px"
-            rond.style.top = y + TAILLE_ROND / 2 + "px"
-            document.getElementById("playground").appendChild(rond)
-
-            descendre(rond)
-        }
+    async function lancerProgramme() {
+        let a = new Run()
+        await a.runPopulationInitiale()
+       let population = a.getListeResultat();
+       naturalSelection(population)
     }
 
-    function descendre(rond) {
-        rond.style.top = parseInt(rond.style.top.substring(0, rond.style.top.length - 2)) + VALEUR_DESCENTE + "px"
-        if (detecterCollisionListe(rond)) {
-            descendreMaxCollide(detecterCollisionListe(rond), rond);
-        }
-        else if (parseInt(rond.style.top.substring(0, rond.style.top.length - 2)) + VALEUR_DESCENTE > BOTTOM_CONTENANT) {
-            sleep(20).then(() => { descendreMax(rond); });
-        }
-        else if (parseInt(rond.style.top.substring(0, rond.style.top.length - 2)) < BOTTOM_CONTENANT) {
-            sleep(20).then(() => { descendre(rond); });
-        }
-    }
 
-    function detecterCollisionListe(rond) {
-        retour = false;
-        var elementsRond = document.querySelectorAll('.rond');
-        elementsRond.forEach(function(element) {
-            if (element.id !== rond.id) {
-                if (detecterCollision(element, rond)) {
-                    retour = element;
-                }
+    function naturalSelection(population) {
+        matingPool = [];
+        for (let pop of population) {
+            let n = Math.floor(pop * 100); 
+            for (let i = 0; i < n; i++) {
+            matingPool.push(pop);
             }
-        });
-        if (retour.classList && rond.classList && retour.classList.toString() == rond.classList.toString()) {
-            fusionner(rond, retour)
         }
-        return retour
-    }
-
-    function fusionner(rond, retour) {
-        rond.remove()
-        if (retour.classList[1] === "taille1") {
-            retour.classList.remove("taille1")
-            retour.classList.add("taille2")
-        }
-        else if (retour.classList[1] === "taille2") {
-            retour.classList.remove("taille2")
-            retour.classList.add("taille3")
-        }
-        else if (retour.classList[1] === "taille3") {
-            retour.classList.remove("taille3")
-            retour.classList.add("taille4")
-        }
-        else if (retour.classList[1] === "taille4") {
-            retour.classList.remove("taille4")
-            retour.classList.add("taille5")
-        }
-        else if (retour.classList[1] === "taille5") {
-            retour.classList.remove("taille5")
-            retour.classList.add("taille6")
-        }
-        else {
-            retour.classList.remove("taille6")
-            retour.classList.add("taille7")
-        }
-        retour.style.top = parseInt(retour.style.top.substring(0, retour.style.top.length - 2)) + 1 + "px"
-        detecterCollisionListe(retour)
-        retour.style.top = parseInt(retour.style.top.substring(0, retour.style.top.length - 2)) - 1 + "px"
-    }
-
-    function descendreMaxCollide(rond1, rond2) {
-        rond2.style.top = parseInt(rond1.style.top.substring(0, rond1.style.top.length - 2)) - TAILLE_ROND + "px"
-        if (rond2.getBoundingClientRect().y < document.getElementById("contenant").getBoundingClientRect().y) {
-            PERDU = true
-        }
-    }
-
-    function detecterCollision(element1, element2) {
-        const rect1 = element1.getBoundingClientRect();
-        const rect2 = element2.getBoundingClientRect();
-
-        if (rect1.top - rect2.top < TAILLE_ROND && rect1.top - rect2.top > 0) {
-            if (rect1.right < rect2.right) {
-                if (rect1.right + TAILLE_ROND / 2 < rect2.right - TAILLE_ROND / 2) {
-                    return false
-                }
-            }
-            else {
-                if (rect1.right - TAILLE_ROND / 2 > rect2.right + TAILLE_ROND / 2) {
-                    return false
-                }
-            }
-            return true
-        }
-
-        /*return !(rect1.right < rect2.left ||
-                rect1.left > rect2.right ||
-                rect1.bottom < rect2.top ||
-                rect1.top > rect2.bottom);*/
-  }
-
-    function descendreMax(rond) {
-        rond.style.top = BOTTOM_CONTENANT + "px"
-    }
-
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        console.log(matingPool);
     }
 
 </script>
