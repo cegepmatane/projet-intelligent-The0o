@@ -7,35 +7,47 @@ class LancerSimulation {
         this.BOTTOM_CONTENANT = document.getElementById("body").offsetHeight - this.TAILLE_ROND;
         this.CLASSE_PROCHAIN_FRUIT = "taille1"
         this.PERDU = false
+        //this.genes = [Math.random() * ((document.getElementById("contenant").getBoundingClientRect().x + document.getElementById("contenant").getBoundingClientRect().width) - document.getElementById("contenant").getBoundingClientRect().x) + document.getElementById("contenant").getBoundingClientRect().x]
         this.genes = [Math.random() * ((document.getElementById("contenant").getBoundingClientRect().x + document.getElementById("contenant").getBoundingClientRect().width) - document.getElementById("contenant").getBoundingClientRect().x) + document.getElementById("contenant").getBoundingClientRect().x]
         for (let index = 0; index < 200; index++) {
-            let minVecteur = document.getElementById("contenant").getBoundingClientRect().x - this.genes.reduce((a, b) => a + b, 0)
-            let maxVecteur = document.getElementById("contenant").getBoundingClientRect().x + document.getElementById("contenant").getBoundingClientRect().width / 1.5 - this.genes.reduce((a, b) => a + b, 0)
-            this.genes.push(Math.random() * (maxVecteur - minVecteur) + minVecteur)
+            //let minVecteur = document.getElementById("contenant").getBoundingClientRect().x - this.genes.reduce((a, b) => a + b, 0)
+            //let maxVecteur = document.getElementById("contenant").getBoundingClientRect().x + document.getElementById("contenant").getBoundingClientRect().width / 1.5 - this.genes.reduce((a, b) => a + b, 0)
+            this.genes.push(Math.random() * ((document.getElementById("contenant").getBoundingClientRect().x + document.getElementById("contenant").getBoundingClientRect().width) - document.getElementById("contenant").getBoundingClientRect().x) + document.getElementById("contenant").getBoundingClientRect().x)
         }
         this.numeroFruit = 1
+        this.fitness = 0
     }
 
     getGenes() {
-        return genes
+        return this.genes
     }
 
     setGenes(genes) {
         this.genes = genes
     }
 
+    setOneGene(gene, i) {
+        this.genes[i] = gene
+    }
+
     pushGenes(genes) {
         this.genes.push(genes)
     }
 
+    getFitness() {
+        return this.numeroFruit / 400
+    }
+
     async run() {
         while (!this.PERDU) {
-            let xRandom = this.genes[this.numeroFruit - 1] + this.genes[this.numeroFruit] + document.getElementById("contenant").getBoundingClientRect().x;
+            let xRandom = this.genes[this.numeroFruit];
             this.ajouterFruit(xRandom, 200);
+            this.numeroFruit++;
             await this.sleep(200);
         }
-        console.log("Score " + this.numeroFruit, this.genes);
+        console.log("Score " + this.numeroFruit);
         this.PERDU = false;
+        this.fitness = this.numeroFruit / 400
     }
 
     ajouterFruit(x, y) {
@@ -49,7 +61,6 @@ class LancerSimulation {
             this.CLASSE_PROCHAIN_FRUIT = "taille" + Math.round(tailleElement)
             document.getElementById("previsualisation").className = this.CLASSE_PROCHAIN_FRUIT
             rond.id = this.numeroFruit
-            this.numeroFruit++;
             rond.style.left = x - (document.getElementById("body").offsetWidth - document.getElementById("grosContenant").offsetWidth) / 2 - this.TAILLE_ROND / 2 + "px"
             rond.style.top = y + this.TAILLE_ROND / 2 + "px"
             document.getElementById("playground").appendChild(rond)

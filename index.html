@@ -19,42 +19,52 @@
 </body>
 <script>
     async function lancerProgramme() {
+        console.log("Generation 1");
+        let generation = 2
         let a = new Run()
         await a.runPopulationInitiale()
-       let population = a.getListeResultat();
-       naturalSelection(population)
+        let population = a.getListePopulation();
+        let enfants = naturalSelection(population)
+        while(true) {
+            console.log("Generation " + generation);
+            generation++
+            await a.runPopulation(enfants)
+            let population = a.getListePopulation();
+            enfants = naturalSelection(population)
+        }
     }
 
 
     function naturalSelection(population) {
         matingPool = [];
         for (let pop of population) {
-            let n = Math.floor(pop * 100); 
+            let n = Math.floor(pop.getFitness() * 100); 
             for (let i = 0; i < n; i++) {
             matingPool.push(pop);
             }
         }
-        console.log(matingPool);
-        reproduce(population)
+        return reproduce(population, matingPool)
     }
 
-    function reproduce(population) {
+    function reproduce(population, matingPool) {
+        let enfants = []
         for (let i = 0; i < population.length; i++) {
             let mummyIndex = Math.floor(Math.random(matingPool.length));
             let daddyIndex = Math.floor(Math.random(matingPool.length));
 
-            console.log(matingPool);
             let mummy = matingPool[mummyIndex];
             let daddy = matingPool[daddyIndex];
 
             let child = crossover(daddy, mummy);
-            child.mutate(mutationRate);
+            mutate(child);
             population[i] = child;
+            enfants.push(child)
         }
+        return enfants
     }
 
     function crossover(partner, self) {
-        let child = new Run();
+        let child = new LancerSimulation();
         child.setGenes([]);
         for (let i = 0; i < self.getGenes().length; i++) {
         if (i % 2 ==0) {
@@ -66,10 +76,10 @@
         return child;
     }
 
-    function  mutate(mutationRate) {
-        for (let i = 0; i < this.genes.length; i++) {
-        if (random(1) < mutationRate) {
-            this.genes[i] = p5.Vector.random2D(); 
+    function mutate(child) {
+        for (let i = 0; i < child.getGenes().length; i++) {
+        if (Math.random(1) < 2) {
+            child.setOneGene(Math.random() * ((document.getElementById("contenant").getBoundingClientRect().x + document.getElementById("contenant").getBoundingClientRect().width) - document.getElementById("contenant").getBoundingClientRect().x) + document.getElementById("contenant").getBoundingClientRect().x, i) 
         }
         }
     }
