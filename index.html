@@ -50,10 +50,19 @@
 
     function naturalSelection(population) {
         matingPool = [];
+
+        listeFitness100 = []
+        listeFitnessBase = []
         for (let pop of population) {
-            let n = Math.floor(pop.getFitness() * 100); 
+            listeFitnessBase.push(pop.getFitness() * 100)
+        }
+        maxValeur = Math.max(...listeFitnessBase);
+        listeFitness100 = listeFitnessBase.map(valeur => valeur / maxValeur);
+
+        for (let [index, pop] of listeFitness100.entries()) {
+            let n = Math.floor(pop * 100); 
             for (let i = 0; i < n; i++) {
-            matingPool.push(pop);
+            matingPool.push(population[index]);
             }
         }
         return reproduce(population, matingPool)
@@ -61,6 +70,7 @@
 
     function reproduce(population, matingPool) {
         let enfants = []
+        console.log(matingPool);
         for (let i = 0; i < population.length; i++) {
             let mummyIndex = Math.floor(Math.random(matingPool.length));
             let daddyIndex = Math.floor(Math.random(matingPool.length));
