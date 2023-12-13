@@ -24,13 +24,26 @@
         let a = new Run()
         await a.runPopulationInitiale()
         let population = a.getListePopulation();
+
+        let listeFitness = [[]]
+        for (let pop of population) {
+            listeFitness[0].push(pop.getFitness()); 
+        }
+
         let enfants = naturalSelection(population)
         while(true) {
             console.log("Generation " + generation);
             generation++
             await a.runPopulation(enfants)
             let population = a.getListePopulation();
+
+            listeFitness.push([])
+            for (let pop of population) {
+                listeFitness[listeFitness.length - 1].push(pop.getFitness()); 
+            }
+            
             enfants = naturalSelection(population)
+            console.log("Liste fitness : " + listeFitness);
         }
     }
 
