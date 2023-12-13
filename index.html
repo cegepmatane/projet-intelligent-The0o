@@ -6,6 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="index.css">
     <script src="Run.js"></script>
+    <script src="LancerSimulation.js"></script>
 </head>
 <body style="background-color: aliceblue;" id="body">
     <div id="grosContenant">
@@ -34,7 +35,46 @@
             }
         }
         console.log(matingPool);
+        reproduce(population)
     }
+
+    function reproduce(population) {
+        for (let i = 0; i < population.length; i++) {
+            let mummyIndex = Math.floor(Math.random(matingPool.length));
+            let daddyIndex = Math.floor(Math.random(matingPool.length));
+
+            console.log(matingPool);
+            let mummy = matingPool[mummyIndex];
+            let daddy = matingPool[daddyIndex];
+
+            let child = crossover(daddy, mummy);
+            child.mutate(mutationRate);
+            population[i] = child;
+        }
+    }
+
+    function crossover(partner, self) {
+        let child = new Run();
+        child.setGenes([]);
+        for (let i = 0; i < self.getGenes().length; i++) {
+        if (i % 2 ==0) {
+            child.pushGenes(self.getGenes()[i]);
+        } else {
+            child.pushGenes(partner.getGenes()[i]);
+        }
+        }
+        return child;
+    }
+
+    function  mutate(mutationRate) {
+        for (let i = 0; i < this.genes.length; i++) {
+        if (random(1) < mutationRate) {
+            this.genes[i] = p5.Vector.random2D(); 
+        }
+        }
+    }
+
+
 
 </script>
 </html>
