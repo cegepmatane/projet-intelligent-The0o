@@ -1,5 +1,10 @@
 # projet-intelligent-The0o
 
+Ma fiche de test : 
+https://docs.google.com/document/d/1zi3Tt2t7kIjynIyRxUskq74f-SddDpJq0VhiemljU8Q/edit?usp=drivesdk
+
+Ma fiche d'apprentissage : https://docs.google.com/document/d/1V_EAB8xXW6f6yFRoWBkuXTDUlqJ72BStqC8x-8p3ya8/edit?usp=drivesdk
+
 Ma fiche de sources de données & univers de simulation :  
 
 https://docs.google.com/document/d/1ZOoq6VGG76uMQZ907nEM7Q7aTe5rrnc-xO3cjxhbu0E/edit?usp=sharing
